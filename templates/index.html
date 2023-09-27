@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Character Counter</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <style>
+      body {
+        font-family: 'Montserrat', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        height: 100vh;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        text-align: center;
+      }
+      .header-image {
+        margin-top: 60px; /* Добавлен отступ над картинкой */
+      }
+      .input-field {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .input-field textarea {
+        width: 320px;
+        height: 36px;
+        border-radius: 24px;
+        padding-top: 8px;
+        padding-bottom: 2px;
+        padding-left: 8px;
+        padding-right: 8px;
+        font-size: 24px;
+        margin-bottom: 16px;
+        outline: none;
+        border: none;
+        background-color: #dddddd;
+        resize: none; /* Отключаем возможность растягивания по углам */
+        text-align: center;
+        font-family: 'Montserrat', sans-serif;
+        overflow: hidden; /* Отключаем скролл */
+      }
+      .input-field button {
+        width: 244px;
+        height: 44px;
+        border-radius: 24px;
+        padding: 6px 12px;
+        font-size: 24px;
+        margin-bottom: 24px;
+        outline: none;
+        border: none;
+        background-color: black;
+        color: white;
+        font-family: 'Montserrat', sans-serif;
+      }
+      .result {
+        font-size: 24px;
+        margin-top: 24px;
+        height: 24px;
+        visibility: hidden;
+      }
+      @media (min-resolution: 144dpi) {
+        .header-image {
+          width: 50%; /* Устанавливаем ширину картинки в 50% для разрешения 144 */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img class="header-image" src="https://drive.google.com/uc?export=view&id=1nHa5VIuh9LpnjhVneZogCZwgdScKDmt_" alt="Cat Image">
+      <h1>Character Counter</h1>
+      <div class="input-field">
+        <textarea id="inputText" placeholder="Enter text" rows="1" oninput="autoResizeTextArea()"></textarea>
+        <button onclick="countChars()">Count Characters</button>
+      </div>
+      <div class="result" id="resultText"></div>
+    </div>
+    <script>
+      function countChars() {
+        var inputText = document.getElementById("inputText").value;
+        fetch('/count_chars', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: 'input_text=' + encodeURIComponent(inputText)
+        })
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById("resultText").textContent = "Character count: " + data;
+          document.getElementById("resultText").style.visibility = "visible";
+        });
+      }
+      function autoResizeTextArea() {
+        const textarea = document.getElementById('inputText');
+        textarea.style.height = 'auto'; // Сбрасываем предыдущую высоту
+        textarea.style.height = `${textarea.scrollHeight}px`; // Устанавливаем высоту равной высоте содержимого
+      }
+    </script>
+  </body>
+</html>
+
